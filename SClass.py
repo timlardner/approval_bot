@@ -6,7 +6,7 @@ class ManageApproved:
     
     def __init__(self):
         # Authenticate and pick a subreddit
-        reddit = praw.Reddit('sbot',user_agent="Testing API functons, /u/timlardner")
+        reddit = praw.Reddit('steroidsbot',user_agent="Testing API functons, /u/timlardner")
         self.subreddit = reddit.subreddit('steroids')
         
         # Get a list of approved submitters
@@ -86,7 +86,11 @@ class WaitList:
             if item.remove is True:
                 # If the approve flag is set, add the user as a contributor
                 print('Approving',item.author)
-                sub.contributor.add(item.author)
+                try:
+                    sub.contributor.add(item.author)
+                except:
+                    print('User could not be approved') # We encounter an error if the user has deleted their account.
+                                                        # We just don't approve them. They'll never know anyway!
                 continue
             # If the approve flag is not set, add the user to a new array
             # This is easier than removing elements from the existing list
